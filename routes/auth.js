@@ -1,6 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const User = require("../models/user"); // Make sure path is correct
+const User = require("../models/User");
 
 const router = express.Router();
 
@@ -9,7 +9,6 @@ router.post("/signup", async (req, res) => {
   console.log("Signup body:", req.body);
   try {
     const { name, email, password } = req.body;
-
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ msg: "User already exists" });
 
@@ -34,7 +33,6 @@ router.post("/login", async (req, res) => {
   console.log("Login body:", req.body);
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ msg: "Invalid credentials" });
 
