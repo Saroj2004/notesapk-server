@@ -1,5 +1,5 @@
 const express = require("express");
-const Note = require("../models/Note");
+const Note = require("../models/note");
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
     const notes = await Note.find({ user: userId }).sort({ createdAt: -1 });
     res.json(notes);
   } catch (err) {
-    console.error(err);
+    console.error("Fetch notes error:", err);
     res.status(500).json({ msg: "Server error, try again later" });
   }
 });
@@ -27,29 +27,7 @@ router.post("/", async (req, res) => {
     await note.save();
     res.json(note);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Server error, try again later" });
-  }
-});
-
-// PUT edit note
-router.put("/:id", async (req, res) => {
-  try {
-    const note = await Note.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(note);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Server error, try again later" });
-  }
-});
-
-// DELETE note
-router.delete("/:id", async (req, res) => {
-  try {
-    await Note.findByIdAndDelete(req.params.id);
-    res.json({ msg: "Note deleted" });
-  } catch (err) {
-    console.error(err);
+    console.error("Add note error:", err);
     res.status(500).json({ msg: "Server error, try again later" });
   }
 });
@@ -65,7 +43,30 @@ router.put("/favorite/:id", async (req, res) => {
 
     res.json(note);
   } catch (err) {
-    console.error(err);
+    console.error("Toggle favorite error:", err);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+});
+
+// PUT edit note
+router.put("/:id", async (req, res) => {
+  try {
+    const note = await Note.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!note) return res.status(404).json({ msg: "Note not found" });
+    res.json(note);
+  } catch (err) {
+    console.error("Edit note error:", err);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+});
+
+// DELETE note
+router.delete("/:id", async (req, res) => {
+  try {
+    await Note.findByIdAndDelete(req.params.id);
+    res.json({ msg: "Note deleted" });
+  } catch (err) {
+    console.error("Delete note error:", err);
     res.status(500).json({ msg: "Server error, try again later" });
   }
 });

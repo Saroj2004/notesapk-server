@@ -6,6 +6,7 @@ const router = express.Router();
 
 // Signup
 router.post("/signup", async (req, res) => {
+  console.log("Signup body:", req.body);
   try {
     const { name, email, password } = req.body;
 
@@ -23,13 +24,14 @@ router.post("/signup", async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email }
     });
   } catch (err) {
-    console.error(err);
+    console.error("Signup error:", err);
     res.status(500).json({ msg: "Server error, try again later" });
   }
 });
 
 // Login
 router.post("/login", async (req, res) => {
+  console.log("Login body:", req.body);
   try {
     const { email, password } = req.body;
 
@@ -44,7 +46,7 @@ router.post("/login", async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email }
     });
   } catch (err) {
-    console.error(err);
+    console.error("Login error:", err);
     res.status(500).json({ msg: "Server error, try again later" });
   }
 });
