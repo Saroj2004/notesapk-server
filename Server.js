@@ -10,12 +10,15 @@ const notesRouter = require("./routes/notesRouter");
 const app = express();
 
 // Middleware
+
+
 app.use(cors({
-  origin: "http://localhost:3000", // frontend URL
+  origin: [
+    "http://localhost:3000", // for local testing
+    "https://notesapk-client-dhx4.vercel.app" // your Vercel URL
+  ],
   credentials: true
 }));
-app.use(express.json());
-
 // Routes
 app.use("/api/auth", authRouter);
 app.use("/api/notes", notesRouter);
